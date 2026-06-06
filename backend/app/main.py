@@ -17,13 +17,15 @@ app = FastAPI(
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
 )
 
-# Set up CORS middleware
-# Reads from configuration settings or defaults to allow typical dev ports
+# Configure CORS Middleware
+# Allows frontend applications (e.g., React on port 3000) to communicate with this API
 origins = [
     "http://localhost:3000",
     "http://localhost:8000",
+    "http://localhost:5173",
     "http://127.0.0.1:3000",
     "http://127.0.0.1:8000",
+    "http://127.0.0.1:5173",
 ]
 
 app.add_middleware(
@@ -34,14 +36,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include Domain API Routers
+# Include API Routers (includes /auth, /users, /vendors, and /rfqs under API_V1_STR prefix)
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 
-# Simple Root Endpoint
+# Root Health Check Endpoint
 @app.get("/", tags=["health"])
 def root() -> dict[str, str]:
     """
-    Root endpoint verifying the API status.
+    Simple health check endpoint confirming the API service status.
     """
     return {"message": "VendorBridge Backend is running"}

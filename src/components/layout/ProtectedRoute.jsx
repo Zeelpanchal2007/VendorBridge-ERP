@@ -2,8 +2,8 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
-const ProtectedRoute = ({ children }) => {
-  const { user, loading } = useAuth();
+const ProtectedRoute = ({ children, allowedRoles }) => {
+  const { user, loading, hasPermission } = useAuth();
 
   if (loading) {
     return (
@@ -15,6 +15,12 @@ const ProtectedRoute = ({ children }) => {
 
   if (!user) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (allowedRoles && !hasPermission(allowedRoles)) {
+    // Redirect to default page based on role if they try to access an unauthorized route
+    const fallbackPath = user.role === 'vendor' ? '/rfqs' : '/dashboard';
+    return <Navigate to={fallbackPath} replace />;
   }
 
   return children;

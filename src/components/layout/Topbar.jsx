@@ -29,8 +29,10 @@ const Topbar = () => {
 
         <div className="flex items-center gap-3">
           <div className="hidden md:block text-right">
-            <p className="text-sm font-medium text-gray-700 dark:text-gray-200">{user?.name}</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">{user?.role}</p>
+            <p className="text-sm font-bold text-gray-900 dark:text-white">{user?.name}</p>
+            <span className="inline-flex items-center px-2 py-0.5 mt-0.5 rounded text-xs font-medium bg-primary/10 text-primary-dark dark:bg-primary/20 dark:text-primary capitalize border border-primary/20">
+              {user?.role?.replace('_', ' ')}
+            </span>
           </div>
           <button
             onClick={logout}

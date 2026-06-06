@@ -14,6 +14,7 @@ import Vendors from './pages/Vendors';
 import RFQs from './pages/RFQs';
 import CreateRFQ from './pages/CreateRFQ';
 import Quotations from './pages/Quotations';
+import VendorQuotations from './pages/VendorQuotations';
 import QuotationComparison from './pages/QuotationComparison';
 import Approvals from './pages/Approvals';
 import Invoices from './pages/Invoices';
@@ -32,16 +33,17 @@ function App() {
             
             <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
               <Route index element={<Navigate to="/dashboard" replace />} />
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="vendors" element={<Vendors />} />
-              <Route path="rfqs" element={<RFQs />} />
-              <Route path="rfqs/create" element={<CreateRFQ />} />
-              <Route path="quotations" element={<Quotations />} />
-              <Route path="quotations/compare/:rfqId" element={<QuotationComparison />} />
-              <Route path="approvals" element={<Approvals />} />
-              <Route path="invoices" element={<Invoices />} />
-              <Route path="reports" element={<Reports />} />
-              <Route path="activity" element={<Activity />} />
+              <Route path="dashboard" element={<ProtectedRoute allowedRoles={['admin', 'manager', 'procurement_officer']}><Dashboard /></ProtectedRoute>} />
+              <Route path="vendors" element={<ProtectedRoute allowedRoles={['admin', 'manager', 'procurement_officer']}><Vendors /></ProtectedRoute>} />
+              <Route path="rfqs" element={<ProtectedRoute allowedRoles={['admin', 'manager', 'procurement_officer', 'vendor']}><RFQs /></ProtectedRoute>} />
+              <Route path="rfqs/create" element={<ProtectedRoute allowedRoles={['admin', 'procurement_officer']}><CreateRFQ /></ProtectedRoute>} />
+              <Route path="quotations" element={<ProtectedRoute allowedRoles={['vendor']}><VendorQuotations /></ProtectedRoute>} />
+              <Route path="quotations/new/:rfqId" element={<ProtectedRoute allowedRoles={['admin', 'vendor']}><Quotations /></ProtectedRoute>} />
+              <Route path="quotations/compare/:rfqId" element={<ProtectedRoute allowedRoles={['admin', 'manager', 'procurement_officer']}><QuotationComparison /></ProtectedRoute>} />
+              <Route path="approvals" element={<ProtectedRoute allowedRoles={['admin', 'manager']}><Approvals /></ProtectedRoute>} />
+              <Route path="invoices" element={<ProtectedRoute allowedRoles={['admin', 'manager', 'procurement_officer', 'vendor']}><Invoices /></ProtectedRoute>} />
+              <Route path="reports" element={<ProtectedRoute allowedRoles={['admin', 'manager', 'procurement_officer']}><Reports /></ProtectedRoute>} />
+              <Route path="activity" element={<ProtectedRoute allowedRoles={['admin', 'manager', 'procurement_officer']}><Activity /></ProtectedRoute>} />
             </Route>
             
             <Route path="*" element={<Navigate to="/login" replace />} />

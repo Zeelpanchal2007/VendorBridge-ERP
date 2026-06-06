@@ -27,7 +27,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-bg-base p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-md bg-bg-card rounded-2xl shadow-soft p-8 border border-gray-100 dark:border-gray-800 relative overflow-hidden">
         
         {/* Decorative background circle */}

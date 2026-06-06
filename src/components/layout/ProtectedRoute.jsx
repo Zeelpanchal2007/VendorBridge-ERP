@@ -18,9 +18,8 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   }
 
   if (allowedRoles && !hasPermission(allowedRoles)) {
-    // Redirect to default page based on role if they try to access an unauthorized route
-    const fallbackPath = user.role === 'vendor' ? '/rfqs' : '/dashboard';
-    return <Navigate to={fallbackPath} replace />;
+    // Redirect to 403 page if they try to access an unauthorized route
+    return <Navigate to="/unauthorized" replace />;
   }
 
   return children;

@@ -8,9 +8,11 @@ const api = axios.create({
   },
 });
 
+import { tokenStore } from '../contexts/AuthContext';
+
 // Request Interceptor: Attach JWT token if available
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  const token = tokenStore.token;
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -28,7 +30,8 @@ api.interceptors.response.use(
     
     if (error.response?.status === 401 && !isAuthRoute) {
       toast.error('Session expired. Please log in again.');
-      localStorage.removeItem('token');
+      tokenStore.token = null;
+      localStorage.removeItem('token'); // Just in case
       localStorage.removeItem('user');
       window.location.href = '/login';
     } else if (error.response?.status === 403 && !isAuthRoute) {

@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api';
 import toast from 'react-hot-toast';
-import { ArrowLeft, Check, X } from 'lucide-react';
+import { ArrowLeft, Check, X, AlertTriangle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import Timeline from '../components/common/Timeline';
 
 const QuotationComparison = () => {
   const { rfqId } = useParams();
@@ -96,12 +97,18 @@ const QuotationComparison = () => {
                   </div>
                 )}
                 
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Vendor ID: {quote.vendor_id}</h3>
-                
+                <div className="flex justify-between items-start mb-4">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">Vendor ID: {quote.vendor_id}</h3>
+                  {quote.is_anomaly && (
+                    <span className="inline-flex items-center gap-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 text-xs font-bold px-2 py-1 rounded-md animate-pulse border border-red-200 dark:border-red-800">
+                      <AlertTriangle size={12} /> High-Risk Anomaly
+                    </span>
+                  )}
+                </div>
                 <div className="space-y-3 mb-6">
                   <div className="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
                     <span className="text-gray-500">Total Amount</span>
-                    <span className="font-bold text-gray-900 dark:text-white">${quote.total_amount.toFixed(2)}</span>
+                    <span className="font-bold text-gray-900 dark:text-white">₹{quote.total_amount.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
                     <span className="text-gray-500">Delivery Days</span>
@@ -117,6 +124,10 @@ const QuotationComparison = () => {
                         <p className="text-sm text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-900 p-2 rounded">{quote.notes}</p>
                      </div>
                   )}
+                </div>
+
+                <div className="mb-6 bg-gray-50/50 dark:bg-gray-900/30 rounded-lg py-2">
+                   <Timeline currentStatus={quote.status} submittedAt={quote.submitted_at} approvalData={quote.approval} />
                 </div>
 
                 {user?.role === 'manager' || user?.role === 'admin' ? (

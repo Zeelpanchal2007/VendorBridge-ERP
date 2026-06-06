@@ -47,7 +47,13 @@ class RoleChecker:
         self.allowed_roles = allowed_roles
 
     def __call__(self, current_user: User = Depends(get_current_user)) -> User:
-        if current_user.role not in self.allowed_roles:
+        user_role = current_user.role.value if hasattr(current_user.role, 'value') else current_user.role
+        allowed_role_values = [role.value if hasattr(role, 'value') else role for role in self.allowed_roles]
+        
+        print(f"DEBUG: current_user.role={current_user.role}, type={type(current_user.role)}")
+        print(f"DEBUG: user_role={user_role}, allowed={allowed_role_values}")
+        
+        if user_role not in allowed_role_values:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="The user doesn't have enough privileges",

@@ -20,8 +20,9 @@ const Sidebar = () => {
     { label: 'Vendors', path: '/vendors', icon: <Users size={20} />, roles: ['admin', 'manager', 'procurement_officer'] },
     { label: 'RFQ\'s', path: '/rfqs', icon: <FileText size={20} />, roles: ['admin', 'manager', 'procurement_officer', 'vendor'] },
     { label: 'Quotations', path: '/quotations', icon: <FileSpreadsheet size={20} />, roles: ['vendor'] },
+    { label: 'My POs', path: '/vendor-pos', icon: <ShoppingCart size={20} />, roles: ['vendor'] },
     { label: 'Approvals', path: '/approvals', icon: <CheckSquare size={20} />, roles: ['admin', 'manager'] },
-    { label: 'POs & Invoices', path: '/invoices', icon: <ShoppingCart size={20} />, roles: ['admin', 'manager', 'procurement_officer', 'vendor'] },
+    { label: 'POs & Invoices', path: '/invoices', icon: <ShoppingCart size={20} />, roles: ['admin', 'manager', 'procurement_officer'] },
   ];
 
   const allowedNavItems = NAV_ITEMS.filter(item => item.roles.includes(user?.role));

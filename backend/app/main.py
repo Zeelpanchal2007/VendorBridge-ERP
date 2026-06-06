@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from pydantic import BaseModel
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -47,3 +48,22 @@ def root() -> dict[str, str]:
     Simple health check endpoint confirming the API service status.
     """
     return {"message": "VendorBridge Backend is running"}
+
+
+class PredictPayload(BaseModel):
+    total_amount: float
+    delivery_days: int
+    vendor_rating: float
+    category: str
+
+@app.post("/predict", tags=["ml"])
+def predict_anomaly(payload: PredictPayload) -> dict:
+    """
+    Mock ML microservice endpoint.
+    Determines if a quotation is an anomaly based on basic heuristics.
+    """
+    is_anomaly = False
+    # Simple heuristic to simulate ML finding an anomaly
+    if payload.total_amount > 100000 or payload.vendor_rating <= 2.0 or payload.delivery_days > 90:
+        is_anomaly = True
+    return {"is_anomaly": is_anomaly}

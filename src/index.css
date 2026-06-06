@@ -9,28 +9,32 @@
   --color-soft-gray: #F8F9FA;
   --color-soft-dark: #343A40;
   
-  --color-primary: #5A8F7B; /* Soft Sage Green */
-  --color-primary-dark: #4A7A68;
+  --color-primary: #4b7b62; /* Emerald/Sage Green from the UI */
+  --color-primary-dark: #3a624d;
   
-  --color-bg-base: #F9FAFB;
-  --color-bg-card: #FFFFFF;
+  --color-bg-base: #f9fafb; /* Light grey background */
+  --color-bg-card: #ffffff; /* White card background */
+  
+  --color-text-main: #1f2937; /* gray-800 */
+  --color-text-muted: #6b7280; /* gray-500 */
+  --color-border: #e5e7eb; /* gray-200 */
 }
 
-@variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where(.force-disable-dark-mode));
 
 @layer base {
   body {
-    @apply bg-slate-50/50 text-gray-800 antialiased bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50/40 via-white to-green-50/20 min-h-screen transition-colors duration-300;
+    @apply bg-[#f9fafb] text-gray-800 antialiased min-h-screen transition-colors duration-300;
   }
   
   .dark body {
-    @apply bg-gray-950 text-gray-100 bg-none transition-colors duration-300;
+    @apply bg-[#f9fafb] text-gray-800 transition-colors duration-300; /* Force light mode even if dark is applied */
   }
 }
 
 @layer components {
   .bg-bg-card {
-    @apply bg-white/70 backdrop-blur-xl border border-white/60 dark:bg-gray-900/80 dark:border-gray-800 transition-all duration-300;
+    @apply bg-white shadow-sm border border-gray-200 transition-all duration-300 rounded-xl;
   }
   .card-hover {
     @apply hover:bg-white/90 hover:shadow-lg dark:hover:bg-gray-800/90 transition-all duration-300 transform hover:-translate-y-1;
@@ -46,3 +50,5 @@
     box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.2);
   }
 }
+
+/* trigger rebuild */

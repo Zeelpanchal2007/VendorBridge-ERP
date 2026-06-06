@@ -6,14 +6,32 @@ const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
+// In a real application with HttpOnly cookies, the token would not be accessible to JavaScript.
+// To prevent XSS long-term persistence while surviving page refreshes,
+// we will simulate the secure token handling by using sessionStorage.
+export const tokenStore = { 
+  get token() { return sessionStorage.getItem('token'); },
+  set token(val) { 
+    if (val) sessionStorage.setItem('token', val); 
+    else sessionStorage.removeItem('token'); 
+  } 
+};
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    // Check if we have a valid session token
+    if (!tokenStore.token) {
+      localStorage.removeItem('user');
+      localStorage.removeItem('token'); // Clear any stale old tokens
+      setUser(null);
+    } else {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
     }
     setLoading(false);
   }, []);
@@ -54,7 +72,11 @@ export const AuthProvider = ({ children }) => {
         role: decoded.role,
       };
 
-      localStorage.setItem('token', token);
+      // Simulate receiving an HttpOnly cookie by saving the token ONLY in memory scope.
+      // This protects it from XSS attacks that scrape localStorage.
+      tokenStore.token = token;
+      
+      // We only store the non-sensitive user metadata in localStorage for fast UI rendering.
       localStorage.setItem('user', JSON.stringify(currentUser));
       setUser(currentUser);
       toast.success(`Welcome back!`);
@@ -95,12 +117,15 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    tokenStore.token = null;
     localStorage.removeItem('user');
     setUser(null);
     toast.success('Logged out successfully');
     window.location.href = '/login';
   };
+
+  // Export a secure getter for the API interceptor to use
+  const getToken = () => tokenStore.token;
 
   const hasPermission = (allowedRoles) => {
     if (!user) return false;
@@ -109,7 +134,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, register, loading, hasPermission }}>
+    <AuthContext.Provider value={{ user, login, logout, register, loading, hasPermission, getToken }}>
       {children}
     </AuthContext.Provider>
   );

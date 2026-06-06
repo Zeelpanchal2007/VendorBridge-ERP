@@ -20,6 +20,7 @@ class VendorCreate(VendorBase):
 
 class VendorUpdate(VendorBase):
     name: Optional[str] = None
+    rating: Optional[float] = None
 
 
 class VendorResponse(VendorBase):

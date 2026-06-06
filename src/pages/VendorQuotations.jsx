@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FileSpreadsheet, AlertCircle, CheckCircle2, Clock } from 'lucide-react';
+import Timeline from '../components/common/Timeline';
 import api from '../api';
 import toast from 'react-hot-toast';
 
@@ -54,42 +55,51 @@ const VendorQuotations = () => {
                 <tr><td colSpan="5" className="px-6 py-12 text-center text-gray-500">Loading your quotations...</td></tr>
               ) : quotations.length > 0 ? (
                  quotations.map((quote) => (
-                  <tr key={quote.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                    <td className="px-6 py-4">
-                      <div className="font-bold text-gray-900 dark:text-white">QT-{quote.id}</div>
-                      <div className="text-xs text-gray-400 mt-1">{new Date(quote.submitted_at).toLocaleDateString()}</div>
-                    </td>
-                    <td className="px-6 py-4 text-primary font-medium">
-                      RFQ-{quote.rfq_id}
-                    </td>
-                    <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                      ${quote.total_amount.toFixed(2)}
-                    </td>
-                    <td className="px-6 py-4 text-gray-600 dark:text-gray-300">
-                      {quote.delivery_days} Days
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col gap-2">
-                        <span className={`inline-flex items-center w-fit gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
-                          quote.status === 'approved' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
-                          quote.status === 'pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' :
-                          'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
-                        }`}>
-                          {quote.status === 'approved' && <CheckCircle2 size={12} />}
-                          {quote.status === 'pending' && <Clock size={12} />}
-                          {quote.status === 'rejected' && <AlertCircle size={12} />}
-                          {quote.status.toUpperCase()}
-                        </span>
-                        
-                        {/* Display Rejection Note if available */}
-                        {quote.status === 'rejected' && quote.approval?.remarks && (
-                          <div className="text-xs text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/10 p-2 rounded border border-red-100 dark:border-red-900/30 mt-1">
-                            <span className="font-bold">Manager Note:</span> {quote.approval.remarks}
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
+                  <React.Fragment key={quote.id}>
+                    <tr className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-t border-gray-100 dark:border-gray-800">
+                      <td className="px-6 py-4">
+                        <div className="font-bold text-gray-900 dark:text-white">QT-{quote.id}</div>
+                        <div className="text-xs text-gray-400 mt-1">{new Date(quote.submitted_at).toLocaleDateString()}</div>
+                      </td>
+                      <td className="px-6 py-4 text-primary font-medium">
+                        RFQ-{quote.rfq_id}
+                      </td>
+                      <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                        ₹{quote.total_amount.toFixed(2)}
+                      </td>
+                      <td className="px-6 py-4 text-gray-600 dark:text-gray-300">
+                        {quote.delivery_days} Days
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex flex-col gap-2">
+                          <span className={`inline-flex items-center w-fit gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
+                            quote.status === 'approved' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
+                            quote.status === 'pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' :
+                            'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+                          }`}>
+                            {quote.status === 'approved' && <CheckCircle2 size={12} />}
+                            {quote.status === 'pending' && <Clock size={12} />}
+                            {quote.status === 'rejected' && <AlertCircle size={12} />}
+                            {quote.status.toUpperCase()}
+                          </span>
+                          
+                          {/* Display Rejection Note if available */}
+                          {quote.status === 'rejected' && quote.approval?.remarks && (
+                            <div className="text-xs text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/10 p-2 rounded border border-red-100 dark:border-red-900/30 mt-1">
+                              <span className="font-bold">Manager Note:</span> {quote.approval.remarks}
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-gray-100 dark:border-gray-800">
+                      <td colSpan="5" className="p-0 bg-gray-50/30 dark:bg-gray-900/20">
+                         <div className="px-6 py-2">
+                            <Timeline currentStatus={quote.status} submittedAt={quote.submitted_at} approvalData={quote.approval} />
+                         </div>
+                      </td>
+                    </tr>
+                  </React.Fragment>
                 ))
               ) : (
                 <tr>

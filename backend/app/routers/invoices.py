@@ -12,7 +12,7 @@ from app.utils.pdf import generate_invoice_pdf
 
 router = APIRouter()
 
-allow_vendors_and_finance = RoleChecker([UserRole.VENDOR, UserRole.ADMIN, UserRole.MANAGER])
+allow_vendors_and_finance = RoleChecker([UserRole.VENDOR, UserRole.ADMIN, UserRole.MANAGER, UserRole.PROCUREMENT_OFFICER])
 
 @router.post("/from-po/{po_id}", response_model=InvoiceResponse, status_code=status.HTTP_201_CREATED)
 def generate_invoice(

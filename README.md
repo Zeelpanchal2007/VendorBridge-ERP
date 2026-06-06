@@ -1,100 +1,125 @@
-# VendorBridge Frontend (React + Vite)
+<div align="center">
+  <h1>🌉 VendorBridge ERP</h1>
+  <p><strong>A Next-Generation Procurement & Vendor Management Platform</strong></p>
+  
+  <p>
+    <img src="https://img.shields.io/badge/Frontend-React%2019%20%7C%20Tailwind%20CSS-blue?style=for-the-badge&logo=react" alt="Frontend" />
+    <img src="https://img.shields.io/badge/Backend-FastAPI%20%7C%20Python-green?style=for-the-badge&logo=fastapi" alt="Backend" />
+    <img src="https://img.shields.io/badge/Database-PostgreSQL-blue?style=for-the-badge&logo=postgresql" alt="Database" />
+  </p>
+</div>
 
-This is the frontend portion of the **VendorBridge Procurement & Vendor Management ERP**. It has been built with React 18, Vite, Tailwind CSS, and a suite of modern libraries to ensure a clean, professional, and scalable architecture.
+<br />
 
-## 🚀 Getting Started
+## 🌟 Overall Vision
 
-### Prerequisites
-- **Node.js** (v18+ recommended)
-- **npm** or **yarn**
-
-### Installation
-
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-2. Start the development server:
-   ```bash
-   npm run dev
-   ```
-
-3. Open [http://localhost:5173](http://localhost:5173) in your browser.
+The vision for **VendorBridge** is to simplify and digitize procurement operations for organizations through a centralized ERP platform. By managing everything from vendor onboarding to final invoice generation in one place, VendorBridge eliminates manual procurement inefficiencies. We deliver structured workflows, centralized vendor communication, and real-time procurement tracking wrapped in a clean, scalable, and intuitive architecture.
 
 ---
 
-## 🔗 Connecting to a FastAPI + PostgreSQL Backend
+## ⚠️ The Problem Statement
 
-The frontend is built to be easily plug-and-play with your backend.
+Organizations struggle with fragmented procurement processes. Managing vendors, tracking Requests for Quotations (RFQs), comparing vendor bids, and handling complex approval hierarchies often involve endless email chains, lost PDFs, and manual data entry. 
 
-### Step 1: Environment Variables
-Create a `.env` file in the root of this project and add your FastAPI backend URL:
-```env
-VITE_API_URL=http://localhost:8000/api
-```
+**The Challenge:** Design and develop a comprehensive Procurement & Vendor Management ERP where organizations can seamlessly handle the entire procurement lifecycle—from creating an RFQ to generating the final paid invoice—while maintaining strict, role-based security.
 
-### Step 2: The API Central Client
-All HTTP requests route through the centralized Axios instance located at `src/api/index.js`.
-- It automatically grabs the JWT token from `localStorage` and injects it into the `Authorization: Bearer <token>` header for every request.
-- It intercepts `401 Unauthorized` responses and automatically redirects the user to the login screen.
+---
 
-### Step 3: Integrating Endpoints
-Currently, the UI components use mock data arrays to demonstrate functionality. To connect them to your FastAPI backend, simply replace the mock state with an API call.
+## 🚀 Our Solution & Approach
 
-Here is an example of how to fetch RFQs from the backend:
+VendorBridge provides a fully integrated, event-driven solution that bridges the gap between organizational procurement needs and vendor fulfillment. 
 
-```jsx
-// src/pages/RFQs.jsx (Example implementation)
-import React, { useState, useEffect } from 'react';
-import api from '../api';
+We approached this problem by building a **modular, role-based architecture**. The application ensures that Procurement Officers, Managers, Vendors, and Admins have customized, secure workspaces. By automating quotation comparisons, digitizing the approval timeline, and auto-generating PDF invoices, VendorBridge acts as a single source of truth for all financial and procurement data.
 
-const RFQs = () => {
-  const [rfqs, setRfqs] = useState([]);
-  const [loading, setLoading] = useState(true);
+---
 
-  useEffect(() => {
-    const fetchRfqs = async () => {
-      try {
-        // Calls http://localhost:8000/api/rfqs
-        const response = await api.get('/rfqs'); 
-        setRfqs(response.data);
-      } catch (error) {
-        console.error("Failed to fetch RFQs", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchRfqs();
-  }, []);
+## ✨ Key Features
 
-  // ... rest of the component
-}
-```
+1. **Intelligent Dashboard & Analytics**
+   - Real-time tracking of Pending Approvals, Active RFQs, and Overdue Invoices.
+   - Dynamic spending summaries and monthly procurement trend visualization.
+   
+2. **Comprehensive Vendor Management**
+   - Streamlined vendor registration and status tracking.
+   - Structured records including GST details, categories, and performance ratings.
 
-### Step 4: Connecting the Login Flow
-Update `src/contexts/AuthContext.jsx` to hit your FastAPI authentication endpoint (usually `POST /token` or `/api/auth/login`).
+3. **Frictionless RFQ Lifecycle**
+   - Procurement officers can easily initiate RFQs with specific product details, quantities, and strict deadlines, assigning them to targeted vendor categories.
 
-```jsx
-const login = async (email, password) => {
-  try {
-    const response = await api.post('/auth/login', { email, password });
-    
-    // Assuming backend returns { access_token: "...", user: { role: "admin", name: "..." } }
-    localStorage.setItem('token', response.data.access_token);
-    localStorage.setItem('user', JSON.stringify(response.data.user));
-    
-    setUser(response.data.user);
-  } catch (error) {
-    throw new Error('Invalid credentials');
-  }
-};
-```
+4. **Vendor Quotation Portal**
+   - Dedicated interfaces for vendors to submit pricing, delivery timelines, and critical notes in response to active RFQs.
 
-## ✨ Features Implemented
-- **Role-Based Access Control**: Supports Admin, Manager, Procurement Officer, and Vendor views.
-- **Dynamic Routing**: Protected routes ensure users only see what they are authorized to see.
-- **Dark Mode**: Fully functional theme toggling with Tailwind dark variants.
-- **PDF Generation**: Purchase Order invoices are generated dynamically using `jsPDF`.
-- **Form Validation**: `react-hook-form` + `zod` schema validations on all forms.
-- **Interactive UI**: Toast notifications, modals, and dynamic multi-step wizards.
+5. **Smart Quotation Comparison**
+   - Side-by-side bid analysis highlighting the lowest price, optimal delivery timelines, and vendor rating indicators to ensure data-driven decision-making.
+
+6. **Hierarchical Approval Workflows**
+   - Secure approval state transitions (Approve/Reject) with timestamped remarks and workflow tracking.
+
+7. **Automated PO & Invoice Generation**
+   - One-click conversion of approved quotations into official Purchase Orders.
+   - Automated tax and total calculations with the ability to generate, download (PDF), and email commercial invoices.
+
+8. **Activity Logs & Audit Trails**
+   - Transparent tracking of all procurement activities, RFQ notifications, and workflow state changes.
+
+---
+
+## 👥 Role-Based Workflows
+
+Security and operational efficiency are maintained through strict role separation:
+
+| Role | Capabilities |
+| :--- | :--- |
+| **Procurement Officer** | Creates RFQs, compares vendor quotations, generates Purchase Orders,vendor verification and processes invoices. |
+| **Manager / Approver** | Reviews procurement requests, approves/rejects quotations, and monitors workflow compliance. |
+| **Vendor** | Submits competitive quotations, tracks RFQ status, and fulfills approved Purchase Orders. |
+| **System Admin** | Manages platform users, oversees vendor registration, and accesses high-level procurement analytics. |
+
+---
+
+## 🔄 The Procurement Lifecycle (How It Works)
+
+1. **Initiation:** Procurement Officer creates an RFQ for required goods/services.
+2. **Bidding:** Invited Vendors receive notifications and submit their competitive quotations.
+3. **Analysis:** The Procurement team compares all submitted quotations side-by-side.
+4. **Approval:** The Manager reviews the selected quotation and provides official approval.
+5. **Procurement:** The approved quotation is automatically converted into an official Purchase Order.
+6. **Fulfillment & Invoicing:** Upon successful delivery, an Invoice is generated from the PO.
+7. **Settlement:** The Invoice is processed, generated as a formatted PDF, and distributed.
+
+---
+
+## 🛠️ Technology Stack
+
+### **Frontend (User Interface)**
+* **Framework:** React 19 + Vite for lightning-fast performance.
+* **Styling:** Tailwind CSS v4 for a premium, custom "AI-inspired" modern aesthetic.
+* **Routing & State:** React Router DOM, customized Context APIs.
+* **Icons & UI:** Lucide React.
+
+### **Backend (Core API & Logic)**
+* **Framework:** FastAPI (Python) for high-performance, asynchronous endpoints.
+* **Authentication:** PyJWT with OAuth2PasswordBearer for secure, stateless role-validation.
+* **Database ORM:** SQLAlchemy with Alembic for robust PostgreSQL schema management.
+* **Document Generation:** ReportLab for dynamic, programmatic PDF generation.
+
+---
+
+## 🎨 Design Mockups
+* **Excalidraw Architecture & UI Flow:** [View Mockup](https://app.excalidraw.com/l/65VNwvy7c4X/5ywnm0v3qhK)
+
+---
+
+## 🏆 Meet the Team
+
+This project was architected and developed by a dedicated group of four engineers:
+
+* **Panchal Zeel** — Frontend Development & Full-Stack Integration
+* **Pansuriya Vatsal** — Backend Developer & API Architecture
+* **Akshata Patel** — UI Designer & Frontend Engineer
+* **Shivani Sheladiya** — Database Architecture & Technical Documentation
+
+---
+<div align="center">
+  <i>Built with precision for seamless procurement.</i>
+</div>

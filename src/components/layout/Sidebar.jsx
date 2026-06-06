@@ -16,15 +16,12 @@ const Sidebar = () => {
   const { user } = useAuth();
 
   const NAV_ITEMS = [
-    { label: 'Dashboard', path: '/dashboard', icon: <LayoutDashboard size={20} />, roles: ['admin', 'manager', 'officer', 'vendor'] },
-    { label: 'Vendors', path: '/vendors', icon: <Users size={20} />, roles: ['admin', 'manager', 'officer'] },
-    { label: 'RFQ\'s', path: '/rfqs', icon: <FileText size={20} />, roles: ['admin', 'manager', 'officer', 'vendor'] },
-    { label: 'Quotations', path: '/quotations', icon: <FileSpreadsheet size={20} />, roles: ['admin', 'manager', 'officer', 'vendor'] },
+    { label: 'Dashboard', path: '/dashboard', icon: <LayoutDashboard size={20} />, roles: ['admin', 'manager', 'procurement_officer'] },
+    { label: 'Vendors', path: '/vendors', icon: <Users size={20} />, roles: ['admin', 'manager', 'procurement_officer'] },
+    { label: 'RFQ\'s', path: '/rfqs', icon: <FileText size={20} />, roles: ['admin', 'manager', 'procurement_officer', 'vendor'] },
+    { label: 'Quotations', path: '/quotations', icon: <FileSpreadsheet size={20} />, roles: ['vendor'] },
     { label: 'Approvals', path: '/approvals', icon: <CheckSquare size={20} />, roles: ['admin', 'manager'] },
-    { label: 'Purchase orders', path: '/invoices', icon: <ShoppingCart size={20} />, roles: ['admin', 'manager', 'officer', 'vendor'] }, // Combined PO and Invoice for now or separated? Mockup shows Invoices in menu but also Purchase orders. Let's add both.
-    { label: 'Invoices', path: '/invoices', icon: <FileText size={20} />, roles: ['admin', 'manager', 'officer', 'vendor'] },
-    { label: 'Reports', path: '/reports', icon: <BarChart2 size={20} />, roles: ['admin', 'manager'] },
-    { label: 'Activity', path: '/activity', icon: <ActivitySquare size={20} />, roles: ['admin', 'manager', 'officer'] },
+    { label: 'POs & Invoices', path: '/invoices', icon: <ShoppingCart size={20} />, roles: ['admin', 'manager', 'procurement_officer', 'vendor'] },
   ];
 
   const allowedNavItems = NAV_ITEMS.filter(item => item.roles.includes(user?.role));

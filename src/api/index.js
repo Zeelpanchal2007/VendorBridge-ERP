@@ -1,12 +1,14 @@
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
+// Request Interceptor: Attach JWT token if available
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -17,16 +19,25 @@ api.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
-// Generic response interceptor to handle errors globally if needed
+// Response Interceptor: Global error handling
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // E.g., redirect to login if 401
-    if (error.response?.status === 401) {
+    // Exclude login/register from global 401 handling
+    const isAuthRoute = error.config?.url?.includes('/auth/login') || error.config?.url?.includes('/auth/signup');
+    
+    if (error.response?.status === 401 && !isAuthRoute) {
+      toast.error('Session expired. Please log in again.');
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       window.location.href = '/login';
+    } else if (error.response?.status === 403 && !isAuthRoute) {
+      toast.error('You do not have permission to perform this action.');
+      // Optional: redirect to dashboard if totally unauthorized, but usually we just want to block the action.
+    } else if (error.response?.data?.detail && !isAuthRoute) {
+       toast.error(error.response.data.detail);
     }
+    
     return Promise.reject(error);
   }
 );

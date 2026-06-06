@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+/* Custom Pastel Theme based on prompt instructions */
+@theme {
+  --color-pastel-blue: #F0F4F8;
+  --color-pastel-green: #E8F5E9;
+  --color-pastel-yellow: #FFF9C4;
+  --color-pastel-red: #FFEBEE;
+  --color-soft-gray: #F8F9FA;
+  --color-soft-dark: #343A40;
+  
+  --color-primary: #5A8F7B; /* Soft Sage Green */
+  --color-primary-dark: #4A7A68;
+  
+  --color-bg-base: #F9FAFB;
+  --color-bg-card: #FFFFFF;
+}
+
+@variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  body {
+    @apply bg-slate-50/50 text-gray-800 antialiased bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50/40 via-white to-green-50/20 min-h-screen transition-colors duration-300;
+  }
+  
+  .dark body {
+    @apply bg-gray-950 text-gray-100 bg-none transition-colors duration-300;
+  }
+}
+
+@layer components {
+  .bg-bg-card {
+    @apply bg-white/70 backdrop-blur-xl border border-white/60 dark:bg-gray-900/80 dark:border-gray-800 transition-all duration-300;
+  }
+  .card-hover {
+    @apply hover:bg-white/90 hover:shadow-lg dark:hover:bg-gray-800/90 transition-all duration-300 transform hover:-translate-y-1;
+  }
+}
+
+/* Custom Utilities for clean minimal look */
+@layer utilities {
+  .shadow-soft {
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  }
+  .dark .shadow-soft {
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.2);
+  }
+}
